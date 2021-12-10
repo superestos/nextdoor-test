@@ -123,10 +123,10 @@ public:
 
     n_edges = 0;
     
-    for (size_t s = 0; s < (size_t)fsize; s += 12) {
+    for (size_t s = 0; s < (size_t)fsize; s += 8) {
       int src = *(int*)(string+s);
       int dst = *(int*)(string+s+4);
-      float weight = *(float*)(string+s+8);
+      //float weight = *(float*)(string+s+8);
 
       if ((size_t)src >= vertices.size()) {
         vertices.resize(src+1);
@@ -142,7 +142,7 @@ public:
         // }
       }
 
-      vertices[src].add_edge(dst, weight);
+      vertices[src].add_edge(dst, 1);
 
       n_edges++;
     }
