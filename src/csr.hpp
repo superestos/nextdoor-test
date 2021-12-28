@@ -3,8 +3,8 @@
 #ifndef __CSR_HPP__
 #define __CSR_HPP__
 
-typedef int32_t VertexID;
-typedef int32_t EdgePos_t;
+typedef u_int32_t VertexID;
+typedef u_int64_t EdgePos_t;
 typedef VertexID VertexID_t;
 
 class VertexRange 
