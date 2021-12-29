@@ -23,7 +23,8 @@ struct RandomWalkApp {
   __host__ __device__ EdgePos_t numSamples(CSR* graph)
   {
     //return graph->get_n_vertices() < 256*1024 ? 100 * graph->get_n_vertices() : graph->get_n_vertices();
-    return 100000000;
+    //return 100000000;
+    return graph->get_n_vertices() * 2;
   }
 
   template<class SampleType>
@@ -80,12 +81,15 @@ struct DeepWalkApp : public RandomWalkApp {
     }
     
     EdgePos_t x = RandNumGen::rand_int(state, numEdges);
+
+    /*
     float y = curand_uniform(state)*max_weight;
 
     while (y > transitEdgeWeights[x]) {
       x = RandNumGen::rand_int(state, numEdges);
       y = curand_uniform(state)*max_weight;
     }
+    */
 
     return transitEdges[x];
   }
@@ -103,7 +107,7 @@ struct PPRApp : public RandomWalkApp {
     if (numEdges == 0) {
       return -1;
     }
-    const float walkEndProb = 0.01f;
+    const float walkEndProb = 0.15;
     float p = curand_uniform(state);
     if (p < walkEndProb) {
       return -1;
@@ -114,12 +118,15 @@ struct PPRApp : public RandomWalkApp {
     }
     
     EdgePos_t x = RandNumGen::rand_int(state, numEdges);
+
+    /*
     float y = curand_uniform(state)*max_weight;
 
     while (y > transitEdgeWeights[x]) {
       x = RandNumGen::rand_int(state, numEdges);
       y = curand_uniform(state)*max_weight;
     }
+    */
 
     return transitEdges[x];
   }

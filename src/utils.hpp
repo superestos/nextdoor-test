@@ -5,6 +5,8 @@
 #include <stdlib.h>
 #include <algorithm>
 #include <iterator>
+#include <chrono>
+#include <iostream>
 #include "csr.hpp"
 
 #ifndef __UTILS_HPP__
@@ -381,8 +383,30 @@ namespace GPUUtils {
     CHK_CU(cudaMalloc(&gpuCSRPartition.device_vertex_array, sizeof(CSR::Vertex)*part.get_n_vertices ()));
     CHK_CU(cudaMalloc(&gpuCSRPartition.device_edge_array, sizeof(CSR::Edge)*part.get_n_edges ()));
     CHK_CU(cudaMalloc(&gpuCSRPartition.device_weights_array, sizeof(float)*part.get_n_edges ()));
+
+    cudaHostRegister((void *)part.vertices, sizeof(CSR::Vertex)*part.get_n_vertices (), 0);
+    cudaHostRegister((void *)part.edges, sizeof(CSR::Edge)*part.get_n_edges (), 0);
+
+    cudaEvent_t start, stop;
+    cudaEventCreate(&start);
+    cudaEventCreate(&stop);
+
+    //auto startTime = std::chrono::high_resolution_clock::now(); 
+    cudaEventRecord(start);
+
     CHK_CU(cudaMemcpy(gpuCSRPartition.device_vertex_array, part.vertices, sizeof(CSR::Vertex)*part.get_n_vertices (), cudaMemcpyHostToDevice));
     CHK_CU(cudaMemcpy(gpuCSRPartition.device_edge_array, part.edges, sizeof(CSR::Edge)*part.get_n_edges (), cudaMemcpyHostToDevice));
+
+    cudaEventRecord(stop);
+    cudaEventSynchronize(stop);
+    float totalTime = 0;
+    cudaEventElapsedTime(&totalTime, start, stop);
+    //cudaDeviceSynchronize();
+    //auto stopTime = std::chrono::high_resolution_clock::now();
+    //size_t totalTime = std::chrono::duration_cast<std::chrono::nanoseconds>(stopTime - startTime).count();
+
+    std::cout << "CopyGraphTime: " << totalTime / 1000.0 << std::endl;
+
     CHK_CU(cudaMemcpy(gpuCSRPartition.device_weights_array, part.weights, sizeof(float)*part.get_n_edges (), cudaMemcpyHostToDevice));
 
     CSRPartition device_csr_partition_value = CSRPartition(part.first_vertex_id,
