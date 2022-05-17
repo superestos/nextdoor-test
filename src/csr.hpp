@@ -389,7 +389,7 @@ struct GPUCSRPartition
   CSRPartition* device_csr;
   CSR::Vertex* device_vertex_array;
   CSR::Edge* device_edge_array;
-  float* device_weights_array;
+  //float* device_weights_array;
 };
 
 #ifdef USE_CONSTANT_MEM

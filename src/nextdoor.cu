@@ -2215,7 +2215,7 @@ void freeDeviceData(NextDoorData<SampleType, App>& data)
     CHK_CU(cudaSetDevice(data.devices[device]));
     CHK_CU(cudaFree(data.gpuCSRPartitions[device].device_vertex_array));
     CHK_CU(cudaFree(data.gpuCSRPartitions[device].device_edge_array));
-    CHK_CU(cudaFree(data.gpuCSRPartitions[device].device_weights_array));
+    //CHK_CU(cudaFree(data.gpuCSRPartitions[device].device_weights_array));
   }
 }
 
