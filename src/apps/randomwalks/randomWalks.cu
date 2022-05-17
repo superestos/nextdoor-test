@@ -1,4 +1,6 @@
-#include <stdlib.h>    
+#include <stdlib.h>
+
+#define ppr_source 10009
 
 struct RandomWalkApp {
   __host__ __device__ int steps() {return 80;}
@@ -95,7 +97,69 @@ struct DeepWalkApp : public RandomWalkApp {
   }
 };
 
-struct PPRApp : public RandomWalkApp {
+struct PPRApp {
+
+    __host__ __device__ int steps() {return 80;}
+
+  __host__ __device__ 
+  int stepSize(int k) {
+    return 1;
+  }
+
+  __host__ __device__ int samplingType()
+  {
+    return SamplingType::IndividualNeighborhood;
+  }
+
+  __host__ __device__ OutputFormat outputFormat()
+  {
+    return SampledVertices;
+  }
+
+  #define VERTICES_PER_SAMPLE 1
+
+  __host__ __device__ EdgePos_t numSamples(CSR* graph)
+  {
+    return graph->get_n_vertices() * 2;
+  }
+
+  template<class SampleType>
+  __host__ std::vector<VertexID_t> initialSample(int sampleIdx, CSR* graph, SampleType& sample)
+  {
+    std::vector<VertexID_t> initialValue;
+
+    for (int i = 0; i < VERTICES_PER_SAMPLE; i++) {
+      initialValue.push_back(ppr_source);
+    }
+
+    return initialValue;
+  }
+
+  __host__ __device__ EdgePos_t initialSampleSize(CSR* graph)
+  {
+    return VERTICES_PER_SAMPLE;
+  }
+
+  __host__ __device__ bool hasExplicitTransits()
+  {
+    return false;
+  }
+
+  template<class SampleType>
+  __host__ __device__ VertexID_t stepTransits(int step, const VertexID_t sampleID, SampleType& sample, int transitIdx, curandState* randState)
+  {
+    return -1;
+  }
+
+  template<class SampleType>
+  __host__ SampleType initializeSample(CSR* graph, const VertexID_t sampleID)
+  {
+    SampleType sample = SampleType ();
+
+    return sample;
+  }
+
+
   template<typename SampleType, typename EdgeArray, typename WeightArray>
   __device__ inline
   VertexID next(int step, CSRPartition* csr, const VertexID* transit, const VertexID sampleIdx,
