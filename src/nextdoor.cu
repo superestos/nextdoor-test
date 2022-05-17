@@ -2018,6 +2018,8 @@ std::vector<GPUCSRPartition> transferCSRToGPUs(NextDoorData& data,  CSR* csr)
 template<typename App>
 int getFinalSampleSize()
 {
+  return 8;
+  /*
   size_t finalSampleSize = 0;
   size_t neighborsToSampleAtStep = 1;
   for (int step = 0; step < App().steps(); step++) {
@@ -2031,6 +2033,7 @@ int getFinalSampleSize()
   }
 
   return finalSampleSize;
+  */
 }
 
 template<typename SampleType, typename App>

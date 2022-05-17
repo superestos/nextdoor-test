@@ -1,7 +1,7 @@
 #include <stdlib.h>    
 
 struct RandomWalkApp {
-  __host__ __device__ int steps() {return 10;}
+  __host__ __device__ int steps() {return 80;}
 
   __host__ __device__ 
   int stepSize(int k) {
