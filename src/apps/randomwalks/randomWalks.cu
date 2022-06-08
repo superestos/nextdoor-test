@@ -1,6 +1,8 @@
 #include <stdlib.h>
 
-#define ppr_source 10009
+//#define ppr_source 10009 // livejournal
+//#define ppr_source 43607 // orkut
+#define ppr_source 23934132 // twitter
 
 struct RandomWalkApp {
   __host__ __device__ int steps() {return 80;}
@@ -24,8 +26,6 @@ struct RandomWalkApp {
 
   __host__ __device__ EdgePos_t numSamples(CSR* graph)
   {
-    //return graph->get_n_vertices() < 256*1024 ? 100 * graph->get_n_vertices() : graph->get_n_vertices();
-    //return 100000000;
     return graph->get_n_vertices() * 2;
   }
 
